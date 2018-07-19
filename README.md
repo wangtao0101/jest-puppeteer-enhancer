@@ -1,2 +1,2 @@
-# i18n-backend
-i18n backend for i18n server
+# Jest Puppeteer Enhancer
+An enhancer for jest puppeteer with auto-screenshot feature, more readable error and nice markdown reporter.
