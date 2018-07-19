@@ -1,0 +1,6 @@
+{
+  "globalSetup": "./lib/setup",
+  "globalTeardown": "jest-environment-puppeteer/teardown",
+  "testEnvironment": "jest-environment-puppeteer",
+  "setupTestFrameworkScriptFile": "./lib/expect"
+}

@@ -1,0 +1,6 @@
+{
+    "js-import.codeCompletionAction": false,
+    "js-import.alias": {
+        "i18n-backend": "src/",
+    },
+}
