@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.release.json",
     "tsc": "tsc",
-    "test": "npm run build && jest",
+    "test": "npm run build && node scripts/jest.js",
     "clean": "rimraf lib",
     "prepublish": "npm run test",
     "coverage": "jest --coverage",
@@ -25,9 +25,12 @@
   },
   "homepage": "https://github.com/wangtao0101/jest-puppeteer-enhancer#readme",
   "devDependencies": {
+    "@types/expect-puppeteer": "^2.2.4",
     "@types/jest": "^23.3.0",
+    "@types/jest-environment-puppeteer": "^2.2.1",
     "@types/node": "^10.5.2",
     "coveralls": "^3.0.2",
+    "express": "^4.16.3",
     "jest": "^23.4.1",
     "nyc": "^12.0.2",
     "puppeteer": "^1.6.0",
@@ -35,7 +38,7 @@
     "ts-jest": "^21.1.4",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.3.1",
-    "typescript": "^2.9.2"
+    "typescript": "^3.0.0-rc"
   },
   "dependencies": {
     "jest-puppeteer": "^3.2.1"

@@ -2,35 +2,59 @@ import 'expect-puppeteer';
 import { MAGIC_SNAPSHOT, imagePath, STUB_MESSAGE } from '../constants';
 const getPuppeteerType = require('expect-puppeteer/lib/utils').getPuppeteerType;
 const getState = require('expect/build/jest_matchers_object').getState;
+import notToMatch from 'expect-puppeteer/lib/matchers/notToMatch';
+import notToMatchElement from 'expect-puppeteer/lib/matchers/notToMatchElement';
+import toClick from 'expect-puppeteer/lib/matchers/toClick';
+import toDisplayDialog from 'expect-puppeteer/lib/matchers/toDisplayDialog';
+import toFill from 'expect-puppeteer/lib/matchers/toFill';
+import toFillForm from 'expect-puppeteer/lib/matchers/toFillForm';
+import toMatch from 'expect-puppeteer/lib/matchers/toMatch';
+import toMatchElement from 'expect-puppeteer/lib/matchers/toMatchElement';
+import toSelect from 'expect-puppeteer/lib/matchers/toSelect';
+import toUploadFile from 'expect-puppeteer/lib/matchers/toUploadFile';
 import * as path from 'path';
 import { randomString } from '../util';
 
-const puppeteerMatchers = {
-  'toClick': 0,
-  'toDisplayDialog': 0,
-  'toFill': 0,
-  'toFillForm': 0,
-  'toMatch': 0,
-  'toMatchElement': 0,
-  'toSelect': 0,
-  'toUploadFile': 0,
-  'not': {
-    'toMatch': 0,
-    'toMatchElement': 0,
+// const wapperMathers = {
+//   toWaitFor: 'waitFor',
+//   toWaitForFunction: 'waitForFunction',
+//   toWaitForNavigation: 'waitForNavigation',
+//   toWaitForRequest: 'waitForRequest',
+//   toWaitForResponse: 'waitForResponse',
+//   toWaitForSelector: 'waitForSelector',
+//   toWaitForXPath: 'waitForXPath',
+//   toGoto: 'goto',
+//   toGoBack: 'goBack',
+//   toGoForward: 'goForward',
+// };
+
+const pageMatchers = {
+  toClick,
+  toDisplayDialog,
+  toFill,
+  toFillForm,
+  toMatch,
+  toMatchElement,
+  toSelect,
+  toUploadFile,
+  not: {
+    toMatch: notToMatch,
+    toMatchElement: notToMatchElement,
   },
 };
 
-const wapperMathers = {
-  toWaitFor: 'waitFor',
-  toWaitForFunction: 'waitForFunction',
-  toWaitForNavigation: 'waitForNavigation',
-  toWaitForRequest: 'waitForRequest',
-  toWaitForResponse: 'waitForResponse',
-  toWaitForSelector: 'waitForSelector',
-  toWaitForXPath: 'waitForXPath',
-  toGoto: 'goto',
-  toGoBack: 'goBack',
-  toGoForward: 'goForward',
+const elementHandleMatchers = {
+  toClick,
+  toFill,
+  toFillForm,
+  toMatch,
+  toMatchElement,
+  toSelect,
+  toUploadFile,
+  not: {
+    toMatch: notToMatch,
+    toMatchElement: notToMatchElement,
+  },
 };
 
 async function createScreenshot(_context, actual, error) {
@@ -41,10 +65,16 @@ async function createScreenshot(_context, actual, error) {
 
 function createMatcher(context, actual, matcher) {
   return async function throwingMatcher(...args) {
+    // @ts-ignore
+    if (typeof global.expect !== 'undefined') {
+      // @ts-ignore
+      global.expect.getState().assertionCalls += 1;
+    }
+
     const err = new Error(STUB_MESSAGE);
     Error.captureStackTrace(err, throwingMatcher);
     try {
-      return await matcher(...args);
+      return await matcher(actual, ...args);
     } catch (error) {
       err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
       err.message = err.message.replace(STUB_MESSAGE, error.message);
@@ -54,51 +84,122 @@ function createMatcher(context, actual, matcher) {
   };
 }
 
+function internalExpect(context, actual, matchers) {
+  const expectation = {
+    not: {},
+  };
+
+  Object.keys(matchers).forEach(key => {
+    if (key === 'not') { return; }
+    expectation[key] = createMatcher(context, actual, matchers[key]);
+  });
+
+  Object.keys(matchers.not).forEach(key => {
+    expectation.not[key] = createMatcher(context, actual, matchers.not[key]);
+  });
+
+  return expectation;
+}
+
+function expectPuppeteer(context, actual) {
+  const type = getPuppeteerType(actual);
+  switch (type) {
+    case 'Page':
+      return internalExpect(context, actual, pageMatchers);
+    case 'ElementHandle':
+      return internalExpect(context, actual, elementHandleMatchers);
+    default:
+      throw new Error(`${actual} is not supported`);
+  }
+}
+
 // @ts-ignore
 if (typeof global.expect !== 'undefined') {
   // @ts-ignore
   const originalExpect = global.expect;
+  const context = getState();
   // @ts-ignore
   global.expect = (actual, ...args) => {
-    const matchers = originalExpect(actual, ...args);
-    const context = getState();
     const type = getPuppeteerType(actual);
-    if (type == null) {
-      return matchers;
+    if (type) {
+      const matchers = expectPuppeteer(context, actual);
+      const jestMatchers = originalExpect(actual, ...args);
+      return {
+        ...jestMatchers,
+        ...matchers,
+        not: {
+          ...jestMatchers.not,
+          ...matchers.not,
+        },
+      };
     }
-    Object.keys(puppeteerMatchers).forEach(key => {
-      if (key === 'not') { return; }
-      if (matchers[key]) {
-        matchers[key] = createMatcher(context, actual, matchers[key]);
-      }
-    });
-
-    Object.keys(puppeteerMatchers.not).forEach(key => {
-      if (matchers.not[key]) {
-        matchers.not[key] = createMatcher(context, actual, matchers.not[key]);
-      }
-    });
-
-    if (type === 'Page') {
-      Object.keys(wapperMathers).map(newMatcher => {
-        matchers[newMatcher] = async function throwingMatcher(...args1) {
-          const err = new Error(STUB_MESSAGE);
-          Error.captureStackTrace(err, throwingMatcher);
-          try {
-            return await actual[wapperMathers[newMatcher]](...args1);
-          } catch (error) {
-            err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
-            err.message = err.message.replace(STUB_MESSAGE, error.message);
-            throw err;
-          }
-        };
-      });
-    }
-    return matchers;
+    return originalExpect(actual, ...args);
   };
-  // 还原expect的属性
   Object.keys(originalExpect).forEach(prop => {
     // @ts-ignore
     global.expect[prop] = originalExpect[prop];
   });
 }
+// function createMatcher(context, actual, matcher) {
+//   return async function throwingMatcher(...args) {
+//     const err = new Error(STUB_MESSAGE);
+//     Error.captureStackTrace(err, throwingMatcher);
+//     try {
+//       return await matcher(...args);
+//     } catch (error) {
+//       err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
+//       err.message = err.message.replace(STUB_MESSAGE, error.message);
+//       await createScreenshot(context, actual, err);
+//       throw err;
+//     }
+//   };
+// }
+
+// // @ts-ignore
+// if (typeof global.expect !== 'undefined') {
+//   // @ts-ignore
+//   const originalExpect = global.expect;
+//   // @ts-ignore
+//   global.expect = (actual, ...args) => {
+//     const matchers = originalExpect(actual, ...args);
+//     const context = getState();
+//     const type = getPuppeteerType(actual);
+//     if (type == null) {
+//       return matchers;
+//     }
+//     Object.keys(puppeteerMatchers).forEach(key => {
+//       if (key === 'not') { return; }
+//       if (matchers[key]) {
+//         matchers[key] = createMatcher(context, actual, matchers[key]);
+//       }
+//     });
+
+//     Object.keys(puppeteerMatchers.not).forEach(key => {
+//       if (matchers.not[key]) {
+//         matchers.not[key] = createMatcher(context, actual, matchers.not[key]);
+//       }
+//     });
+
+//     if (type === 'Page') {
+//       Object.keys(wapperMathers).map(newMatcher => {
+//         matchers[newMatcher] = async function throwingMatcher(...args1) {
+//           const err = new Error(STUB_MESSAGE);
+//           Error.captureStackTrace(err, throwingMatcher);
+//           try {
+//             return await actual[wapperMathers[newMatcher]](...args1);
+//           } catch (error) {
+//             err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
+//             err.message = err.message.replace(STUB_MESSAGE, error.message);
+//             throw err;
+//           }
+//         };
+//       });
+//     }
+//     return matchers;
+//   };
+//   // 还原expect的属性
+//   Object.keys(originalExpect).forEach(prop => {
+//     // @ts-ignore
+//     global.expect[prop] = originalExpect[prop];
+//   });
+// }
