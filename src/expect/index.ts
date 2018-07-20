@@ -14,6 +14,7 @@ import toSelect from 'expect-puppeteer/lib/matchers/toSelect';
 import toUploadFile from 'expect-puppeteer/lib/matchers/toUploadFile';
 import * as path from 'path';
 import { randomString } from '../util';
+import toHover from './matcher/toHover';
 
 const pageMatchers = {
   toWaitFor: 'waitFor',
@@ -26,6 +27,7 @@ const pageMatchers = {
   toGoto: 'goto',
   toGoBack: 'goBack',
   toGoForward: 'goForward',
+  toHover,
   toClick,
   toDisplayDialog,
   toFill,
@@ -41,6 +43,7 @@ const pageMatchers = {
 };
 
 const elementHandleMatchers = {
+  toHover,
   toClick,
   toFill,
   toFillForm,
