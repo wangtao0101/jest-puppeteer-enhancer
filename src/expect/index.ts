@@ -15,20 +15,17 @@ import toUploadFile from 'expect-puppeteer/lib/matchers/toUploadFile';
 import * as path from 'path';
 import { randomString } from '../util';
 
-// const wapperMathers = {
-//   toWaitFor: 'waitFor',
-//   toWaitForFunction: 'waitForFunction',
-//   toWaitForNavigation: 'waitForNavigation',
-//   toWaitForRequest: 'waitForRequest',
-//   toWaitForResponse: 'waitForResponse',
-//   toWaitForSelector: 'waitForSelector',
-//   toWaitForXPath: 'waitForXPath',
-//   toGoto: 'goto',
-//   toGoBack: 'goBack',
-//   toGoForward: 'goForward',
-// };
-
 const pageMatchers = {
+  toWaitFor: 'waitFor',
+  toWaitForFunction: 'waitForFunction',
+  toWaitForNavigation: 'waitForNavigation',
+  toWaitForRequest: 'waitForRequest',
+  toWaitForResponse: 'waitForResponse',
+  toWaitForSelector: 'waitForSelector',
+  toWaitForXPath: 'waitForXPath',
+  toGoto: 'goto',
+  toGoBack: 'goBack',
+  toGoForward: 'goForward',
   toClick,
   toDisplayDialog,
   toFill,
@@ -71,6 +68,13 @@ function createMatcher(context, actual, matcher) {
       global.expect.getState().assertionCalls += 1;
     }
 
+    if (typeof matcher === 'string') {
+      const type = matcher;
+      matcher = async function (page, ...innterArgs) {
+        return await page[type](...innterArgs);
+      };
+    }
+
     const err = new Error(STUB_MESSAGE);
     Error.captureStackTrace(err, throwingMatcher);
     try {
@@ -78,8 +82,11 @@ function createMatcher(context, actual, matcher) {
     } catch (error) {
       err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
       err.message = err.message.replace(STUB_MESSAGE, error.message);
-      await createScreenshot(context, actual, err);
-      throw err;
+      try {
+        await createScreenshot(context, actual, err);
+      } finally {
+        throw err;
+      }
     }
   };
 }

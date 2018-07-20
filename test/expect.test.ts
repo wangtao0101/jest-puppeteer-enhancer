@@ -8,10 +8,22 @@ describe('expect', () => {
   test('expect-puppeteer work well with original expect', async () => {
     await expect(page).toBeDefined();
     await expect(page).toMatch('home');
+    // @ts-ignore
+    await expect(page).toWaitFor(10);
   });
 
   test('expect page', async () => {
     const pageExpectArray = [
+      'toWaitFor',
+      'toWaitForFunction',
+      'toWaitForNavigation',
+      'toWaitForRequest',
+      'toWaitForResponse',
+      'toWaitForSelector',
+      'toWaitForXPath',
+      'toGoto',
+      'toGoBack',
+      'toGoForward',
       'toClick',
       'toDisplayDialog',
       'toFill',
