@@ -15,6 +15,7 @@ import toUploadFile from 'expect-puppeteer/lib/matchers/toUploadFile';
 import * as path from 'path';
 import { randomString } from '../util';
 import toHover from './matcher/toHover';
+import toMouseEnter from './matcher/toMouseEnter';
 
 const pageMatchers = {
   toWaitFor: 'waitFor',
@@ -27,6 +28,7 @@ const pageMatchers = {
   toGoto: 'goto',
   toGoBack: 'goBack',
   toGoForward: 'goForward',
+  toMouseEnter,
   toHover,
   toClick,
   toDisplayDialog,

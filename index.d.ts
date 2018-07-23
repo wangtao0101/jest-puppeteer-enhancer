@@ -21,12 +21,21 @@ interface ExpectTimingActions {
   delay?: number;
 }
 
+interface ExpectToClickOptions extends ExpectTimingActions {
+  /**
+   * A text or a RegExp to match in element textContent.
+   */
+  text?: string | RegExp;
+}
+
 declare global {
   namespace jest {
     // tslint:disable-next-line no-empty-interface
     interface Matchers<R> {
       // These must all match the ExpectPuppeteer interface above.
       // We can't extend from it directly because some method names conflict in type-incompatible ways.
+
+      toMouseEnter(selector: string, options?: ExpectToClickOptions): Promise<void>;
 
       toHover(selector: string): Promise<void>;
 

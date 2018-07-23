@@ -20,6 +20,8 @@ describe('expect', () => {
       'toWaitForResponse',
       'toWaitForSelector',
       'toWaitForXPath',
+      'toMouseEnter',
+      'toHover',
       'toGoto',
       'toGoBack',
       'toGoForward',

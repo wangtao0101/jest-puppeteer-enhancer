@@ -11,6 +11,15 @@
         display: block;
       }
     </style>
+    <script>
+    {
+      console.log('asdfasdf');
+
+      function onMouseMove() {
+        document.querySelector('.mousemove').innerHTML = 'mousemove';
+      }
+    }
+    </script>
   </head>
   <body>
     <header>This is home!</header>
@@ -37,6 +46,9 @@
       <div class="hoverChild">
         I am hover.
       </div>
+    </div>
+    <div class='mousemove' onmouseenter="onMouseMove()">
+      waiting for mouse enter
     </div>
   </body>
 </html>
