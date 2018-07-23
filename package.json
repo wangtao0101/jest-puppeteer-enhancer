@@ -5,12 +5,13 @@
   "main": "lib/src/index.js",
   "typings": "typings/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc -p tsconfig.json",
+    "build": "npm run clean && tsc -p tsconfig.release.json",
+    "build-test": "npm run clean && tsc -p tsconfig.json",
     "tsc": "tsc",
-    "test": "npm run build && node scripts/jest.js",
+    "test": "npm run build-test && node scripts/jest.js",
     "clean": "rimraf lib",
-    "prepublish": "npm run test",
-    "coverage": "jest --coverage",
+    "prepublish": "npm run test && npm run build",
+    "coverage": "npm run build && node scripts/jest.js --coverage",
     "report": "nyc report --temp-directory=coverage --reporter=text-lcov | coveralls",
     "coveralls": "npm run coverage && npm run report"
   },
