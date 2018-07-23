@@ -1,6 +1,6 @@
 {
   "name": "jest-puppeteer-enhancer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An enhancer for jest puppeteer with auto-screenshot feature, more readable error and nice markdown reporter.",
   "main": "lib/src/index.js",
   "typings": "typings/index.d.ts",

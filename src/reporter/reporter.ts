@@ -136,7 +136,8 @@ ${testContent}
           }
           testReporterMd = `${testReporterMd}
 \`\`\`js
-${stripAnsi(message)}${callSite != null ? '\n' + stripAnsi(callSite) : ''}\`\`\`
+${stripAnsi(message)}${callSite != null ? '\n' + stripAnsi(callSite) : ''}
+\`\`\`
 ${formatedStack}
 `;
         });
