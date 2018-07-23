@@ -73,8 +73,8 @@ function createMatcher(context, actual, matcher) {
 
     if (typeof matcher === 'string') {
       const type = matcher;
-      matcher = async function (page, ...innterArgs) {
-        return await page[type](...innterArgs);
+      matcher = async function (innerActual, ...innterArgs) {
+        return await innerActual[type](...innterArgs);
       };
     }
 
@@ -150,66 +150,3 @@ if (typeof global.expect !== 'undefined') {
     global.expect[prop] = originalExpect[prop];
   });
 }
-// function createMatcher(context, actual, matcher) {
-//   return async function throwingMatcher(...args) {
-//     const err = new Error(STUB_MESSAGE);
-//     Error.captureStackTrace(err, throwingMatcher);
-//     try {
-//       return await matcher(...args);
-//     } catch (error) {
-//       err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
-//       err.message = err.message.replace(STUB_MESSAGE, error.message);
-//       await createScreenshot(context, actual, err);
-//       throw err;
-//     }
-//   };
-// }
-
-// // @ts-ignore
-// if (typeof global.expect !== 'undefined') {
-//   // @ts-ignore
-//   const originalExpect = global.expect;
-//   // @ts-ignore
-//   global.expect = (actual, ...args) => {
-//     const matchers = originalExpect(actual, ...args);
-//     const context = getState();
-//     const type = getPuppeteerType(actual);
-//     if (type == null) {
-//       return matchers;
-//     }
-//     Object.keys(puppeteerMatchers).forEach(key => {
-//       if (key === 'not') { return; }
-//       if (matchers[key]) {
-//         matchers[key] = createMatcher(context, actual, matchers[key]);
-//       }
-//     });
-
-//     Object.keys(puppeteerMatchers.not).forEach(key => {
-//       if (matchers.not[key]) {
-//         matchers.not[key] = createMatcher(context, actual, matchers.not[key]);
-//       }
-//     });
-
-//     if (type === 'Page') {
-//       Object.keys(wapperMathers).map(newMatcher => {
-//         matchers[newMatcher] = async function throwingMatcher(...args1) {
-//           const err = new Error(STUB_MESSAGE);
-//           Error.captureStackTrace(err, throwingMatcher);
-//           try {
-//             return await actual[wapperMathers[newMatcher]](...args1);
-//           } catch (error) {
-//             err.stack = err.stack!.replace(STUB_MESSAGE, error.message);
-//             err.message = err.message.replace(STUB_MESSAGE, error.message);
-//             throw err;
-//           }
-//         };
-//       });
-//     }
-//     return matchers;
-//   };
-//   // 还原expect的属性
-//   Object.keys(originalExpect).forEach(prop => {
-//     // @ts-ignore
-//     global.expect[prop] = originalExpect[prop];
-//   });
-// }

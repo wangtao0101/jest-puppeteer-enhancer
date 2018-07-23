@@ -30,7 +30,7 @@ const fileNameRegex = /reporter(\d*)\.md/;
 const getReporterFileName = () => {
   let files = fs.readdirSync(reporterPath);
   let fileIndex = -1;
-  files.forEach((val, index) => {
+  files.forEach((val, _index) => {
     let fPath = path.join(reporterPath, val);
     let stats = fs.statSync(fPath);
     if (stats.isFile()) {
@@ -61,7 +61,7 @@ class Reporter {
     this._options = options;
   }
 
-  onRunComplete(contexts, results) {
+  onRunComplete(_contexts, results) {
     let content = `
 Test Suites: <font color=red>${results.numFailedTestSuites} failed</font>, <font color='#96E22E'>${results.numPassedTestSuites} passed</font>, <font color='#B2D62E'>${results.numPendingTestSuites} skipped</font>, ${results.numTotalTestSuites} total
 
@@ -113,7 +113,7 @@ ${testContent}
     fs.writeFileSync(path.join(reporterPath, getReporterFileName()), content);
   }
 
-  onTestResult(test, testResult, aggregatedResult) {
+  onTestResult(_test, testResult, _aggregatedResult) {
     testResult.testResults.map((result) => {
       if (result.status === 'failed') {
         const title = result.ancestorTitles.join(' > ');

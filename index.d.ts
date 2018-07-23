@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 
-import { ElementHandle, Page, Dialog, NavigationOptions } from "puppeteer";
+import { ElementHandle, Page, Dialog, NavigationOptions, PageFnOptions } from "puppeteer";
 
 type ExpectPolling = number | "mutation" | "raf";
 
@@ -21,13 +21,6 @@ interface ExpectTimingActions {
   delay?: number;
 }
 
-interface ExpectToClickOptions extends ExpectTimingActions {
-  /**
-   * A text or a RegExp to match in element textContent.
-   */
-  text?: string | RegExp;
-}
-
 declare global {
   namespace jest {
     // tslint:disable-next-line no-empty-interface
@@ -35,7 +28,7 @@ declare global {
       // These must all match the ExpectPuppeteer interface above.
       // We can't extend from it directly because some method names conflict in type-incompatible ways.
 
-      toHover(selector: string, options?: ExpectToClickOptions): Promise<void>;
+      toHover(selector: string): Promise<void>;
 
       toFill(selector: string, value: string, options?: ExpectTimingActions): Promise<void>;
 
@@ -45,7 +38,35 @@ declare global {
         ...args: any[]
       ): Promise<void>;
 
+      toWaitForFunction(
+        // fn can be an abritary function
+        // tslint:disable-next-line ban-types
+        fn: string | Function,
+        options?: PageFnOptions,
+        ...args: any[]
+      ): Promise<any>;
+
       toWaitForNavigation(options?: NavigationOptions): Promise<Response>;
+
+      toWaitForRequest(
+        urlOrPredicate: string | ((req: Request) => boolean),
+        options?: { timeout?: number }
+      ): Promise<Request>;
+
+      toWaitForResponse(
+        urlOrPredicate: string | ((res: Response) => boolean),
+        options?: { timeout?: number }
+      ): Promise<Response>;
+
+      toWaitForSelector(
+        selector: string,
+        options?: { visible?: boolean; hidden?: boolean; timeout?: number }
+      ): Promise<ElementHandle>;
+
+      toWaitForXPath(
+        xpath: string,
+        options?: { visible?: boolean; hidden?: boolean; timeout?: number }
+      ): Promise<ElementHandle>;
 
       /**
      * Navigate to the previous page in history.

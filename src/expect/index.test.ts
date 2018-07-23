@@ -8,7 +8,6 @@ describe('expect', () => {
   test('expect-puppeteer work well with original expect', async () => {
     await expect(page).toBeDefined();
     await expect(page).toMatch('home');
-    // @ts-ignore
     await expect(page).toWaitFor(10);
   });
 

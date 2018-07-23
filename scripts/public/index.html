@@ -3,6 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>Test App</title>
+    <style>
+      .hoverChild {
+        display: none;
+      }
+      .hoverFather:hover .hoverChild {
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <header>This is home!</header>
@@ -24,5 +32,11 @@
         A div in the main
       </div>
     </main>
+    <div class='hoverFather'>
+      hover
+      <div class="hoverChild">
+        I am hover.
+      </div>
+    </div>
   </body>
 </html>
