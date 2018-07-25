@@ -11,4 +11,10 @@ describe('toMouseEnter', () => {
     await expect(page).toMouseEnter('.mousemove');
     await expect(page).toMatch('mousemove');
   });
+
+  test.only('elementHandle.toMouseEnter', async () => {
+    const body = await page.$('body');
+    await expect(body).toMouseEnter('.mousemove');
+    await expect(page).toMatch('mousemove');
+  });
 });

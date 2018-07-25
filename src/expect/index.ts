@@ -45,6 +45,7 @@ const pageMatchers = {
 };
 
 const elementHandleMatchers = {
+  toMouseEnter,
   toHover,
   toClick,
   toFill,
