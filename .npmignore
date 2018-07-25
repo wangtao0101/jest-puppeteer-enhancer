@@ -17,3 +17,5 @@ storybook-static
 scripts
 src/locale
 test/jsonData.json
+.reporter
+tslint.json
