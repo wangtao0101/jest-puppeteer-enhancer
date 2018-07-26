@@ -41,6 +41,8 @@ declare global {
 
       toFill(selector: string, value: string, options?: ExpectTimingActions): Promise<void>;
 
+      toMatchElement(selector: string, options?: ExpectToClickOptions): Promise<ElementHandle>;
+
       toWaitFor(
         selectorOrFunctionOrTimeout: string | number | Function,
         options?: any,
