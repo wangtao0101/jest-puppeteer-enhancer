@@ -16,6 +16,10 @@
       function onMouseMove() {
         document.querySelector('.mousemove').innerHTML = 'mousemove';
       }
+
+      onload = function () {
+        fetch('https://randomuser.me/api/');
+      }
     }
     </script>
   </head>

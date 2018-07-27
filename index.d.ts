@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 
-import { ElementHandle, Page, Dialog, NavigationOptions, PageFnOptions } from "puppeteer";
+import { ElementHandle, Page, Dialog, NavigationOptions, PageFnOptions, Response, Request } from "puppeteer";
 
 type ExpectPolling = number | "mutation" | "raf";
 
@@ -68,6 +68,11 @@ declare global {
         urlOrPredicate: string | ((res: Response) => boolean),
         options?: { timeout?: number }
       ): Promise<Response>;
+
+      toWaitForResponseJson(
+        urlOrPredicate: string | RegExp |((res: Response) => boolean),
+        options?: { timeout?: number }
+      ): Promise<Object>;
 
       toWaitForSelector(
         selector: string,

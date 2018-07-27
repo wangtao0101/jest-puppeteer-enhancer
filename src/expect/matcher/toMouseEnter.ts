@@ -13,6 +13,7 @@ async function toMouseEnter(instance, selector, options) {
   }
 
   const element = await toMatchElement(instance, selector, options);
+  await element._scrollIntoViewIfNeeded();
   const { x, y, width, height } = await element.boundingBox();
   await page!.mouse.move(x + width / 2, y + height / 2);
 }

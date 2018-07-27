@@ -8,3 +8,11 @@ export function randomString(length = 16) {
   }
   return noceStr;
 }
+
+export function isString(obj) {
+  return typeof obj === 'string' || obj instanceof String;
+}
+
+export function isRegExp(obj) {
+  return Object.prototype.toString.call(obj) === '[object RegExp]';
+}

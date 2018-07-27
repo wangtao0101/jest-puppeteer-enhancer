@@ -16,6 +16,7 @@ import * as path from 'path';
 import { randomString } from '../util';
 import toHover from './matcher/toHover';
 import toMouseEnter from './matcher/toMouseEnter';
+import toWaitForResponseJson from './matcher/toWaitForResponseJson';
 
 const pageMatchers = {
   toWaitFor: 'waitFor',
@@ -28,6 +29,7 @@ const pageMatchers = {
   toGoto: 'goto',
   toGoBack: 'goBack',
   toGoForward: 'goForward',
+  toWaitForResponseJson,
   toMouseEnter,
   toHover,
   toClick,
