@@ -1,6 +1,6 @@
 {
   "name": "jest-puppeteer-enhancer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An enhancer for jest puppeteer with auto-screenshot feature, more readable error and nice markdown reporter.",
   "main": "lib/src/index.js",
   "typings": "typings/index.d.ts",
@@ -26,9 +26,7 @@
   },
   "homepage": "https://github.com/wangtao0101/jest-puppeteer-enhancer#readme",
   "devDependencies": {
-    "@types/expect-puppeteer": "^2.2.4",
     "@types/jest": "^23.3.0",
-    "@types/jest-environment-puppeteer": "^2.2.1",
     "@types/node": "^10.5.2",
     "@types/puppeteer": "^1.5.1",
     "coveralls": "^3.0.2",
@@ -37,7 +35,7 @@
     "nyc": "^12.0.2",
     "puppeteer": "^1.6.0",
     "rimraf": "^2.6.2",
-    "ts-jest": "^21.1.4",
+    "ts-jest": "^23.0.1",
     "tslint": "^5.11.0",
     "tslint-eslint-rules": "^5.3.1",
     "typescript": "^3.0.0-rc"

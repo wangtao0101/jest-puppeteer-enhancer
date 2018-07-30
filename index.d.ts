@@ -1,6 +1,6 @@
 /// <reference types="jest" />
 
-import { ElementHandle, Page, Dialog, NavigationOptions, PageFnOptions, Response, Request } from "puppeteer";
+import { ElementHandle, Page, Dialog, NavigationOptions, PageFnOptions, Response, Request, Browser } from "puppeteer";
 
 type ExpectPolling = number | "mutation" | "raf";
 
@@ -29,6 +29,10 @@ interface ExpectToClickOptions extends ExpectTimingActions {
 }
 
 declare global {
+
+  const browser: Browser;
+  const page: Page;
+
   namespace jest {
     // tslint:disable-next-line no-empty-interface
     interface Matchers<R> {
@@ -42,6 +46,12 @@ declare global {
       toFill(selector: string, value: string, options?: ExpectTimingActions): Promise<void>;
 
       toMatchElement(selector: string, options?: ExpectToClickOptions): Promise<ElementHandle>;
+
+      toClick(selector: string, options?: ExpectToClickOptions): Promise<void>;
+      toDisplayDialog(block: () => Promise<void>): Promise<Dialog>;
+      toMatch(selector: string, options?: ExpectTimingActions): Promise<void>;
+      toSelect(selector: string, valueOrText: string, options?: ExpectTimingActions): Promise<void>;
+      toUploadFile(selector: string, filePath: string, options?: ExpectTimingActions): Promise<void>;
 
       toWaitFor(
         selectorOrFunctionOrTimeout: string | number | Function,
@@ -70,7 +80,7 @@ declare global {
       ): Promise<Response>;
 
       toWaitForResponseJson(
-        urlOrPredicate: string | RegExp |((res: Response) => boolean),
+        urlOrPredicate: string | RegExp | ((res: Response) => boolean),
         options?: { timeout?: number }
       ): Promise<Object>;
 
