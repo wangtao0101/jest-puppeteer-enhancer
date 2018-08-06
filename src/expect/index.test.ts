@@ -1,3 +1,4 @@
+import { extendExpectPage, extendExpectElementHandle } from '.';
 
 describe('expect', () => {
 
@@ -59,5 +60,22 @@ describe('expect', () => {
     const dialogBtn = await page.$('#dialog-btn');
     await expect(Object.keys(expect(dialogBtn))).toEqual(expect.arrayContaining(elementHandleExpectArray));
     await expect(Object.keys(expect(dialogBtn).not)).toEqual(expect.arrayContaining(elementHandleExpectNotArray));
+  });
+
+  test('extendExpectPage async', async () => {
+    extendExpectPage('extendPage', async () => {
+      return 'extendPage';
+    });
+    // @ts-ignore
+    expect(await expect(page).extendPage()).toBe('extendPage');
+  });
+
+  test('extendExpectElementHandle', async () => {
+    extendExpectElementHandle('ElementHandle', async () => {
+      return 'ElementHandle';
+    });
+    const body = await page.$('body');
+    // @ts-ignore
+    expect(await expect(body).ElementHandle()).toBe('ElementHandle');
   });
 });

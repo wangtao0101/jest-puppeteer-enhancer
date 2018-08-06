@@ -155,3 +155,25 @@ if (typeof global.expect !== 'undefined') {
     global.expect[prop] = originalExpect[prop];
   });
 }
+
+function extendExpect(key, matcher, not, matchers) {
+  if (not) {
+    if (matchers.not[key] !== null) {
+      throw new Error('The key of expect().not is exist.');
+    }
+    matchers.not[key] = matcher;
+    return;
+  }
+  if (matchers[key] != null) {
+    throw new Error('The key of expect() is exist.');
+  }
+  matchers[key] = matcher;
+}
+
+export function extendExpectPage(key, matcher, not = false) {
+  extendExpect(key, matcher, not, pageMatchers);
+}
+
+export function extendExpectElementHandle(key, matcher, not = false) {
+  extendExpect(key, matcher, not, elementHandleMatchers);
+}
