@@ -158,7 +158,7 @@ if (typeof global.expect !== 'undefined') {
 
 function extendExpect(key, matcher, not, matchers) {
   if (not) {
-    if (matchers.not[key] !== null) {
+    if (matchers.not[key] != null) {
       throw new Error('The key of expect().not is exist.');
     }
     matchers.not[key] = matcher;

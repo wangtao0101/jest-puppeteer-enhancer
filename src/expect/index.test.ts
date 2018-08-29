@@ -78,4 +78,12 @@ describe('expect', () => {
     // @ts-ignore
     expect(await expect(body).ElementHandle()).toBe('ElementHandle');
   });
+
+  test('not', async () => {
+    extendExpectPage('not', async () => {
+      return 'not';
+    }, true);
+    // @ts-ignore
+    expect(await expect(page).not.not()).toBe('not');
+  });
 });
