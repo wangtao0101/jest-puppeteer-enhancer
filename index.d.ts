@@ -79,11 +79,6 @@ declare global {
         options?: { timeout?: number }
       ): Promise<Response>;
 
-      toWaitForResponseJson(
-        urlOrPredicate: string | RegExp | ((res: Response) => boolean),
-        options?: { timeout?: number }
-      ): Promise<Object>;
-
       toWaitForSelector(
         selector: string,
         options?: { visible?: boolean; hidden?: boolean; timeout?: number }
