@@ -177,10 +177,14 @@ module.exports = (
 
   const contentLines = content.split('\n');
   let screenshot = '';
+  let time = '';
   if (contentLines.length !== 0) {
     const lastLine = contentLines[contentLines.length - 1];
     if (lastLine.includes(MAGIC_SNAPSHOT)) {
       screenshot = lastLine.split('=')[1];
+      const lastSecondLine = contentLines[contentLines.length - 2];
+      time = lastSecondLine.split('=')[1];
+      contentLines.pop();
       contentLines.pop();
     }
   }
@@ -200,5 +204,6 @@ module.exports = (
     callSite,
     stack: stackLines.join('  \n'),
     screenshot,
+    time,
   };
 };

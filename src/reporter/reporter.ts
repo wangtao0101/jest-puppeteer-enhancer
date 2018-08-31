@@ -129,10 +129,14 @@ ${testContent}
             callSite,
             stack,
             screenshot,
+            time,
           } = formatResultsErrors(failureMsg);
           const formatedStack = formatStackPath(stack);
           if (screenshot !== '') {
             image = `![image](./images/${screenshot})`;
+          }
+          if (time !== '') {
+            testReporterMd += `\nTime: ${time}`;
           }
           testReporterMd = `${testReporterMd}
 \`\`\`js

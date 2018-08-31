@@ -1,5 +1,5 @@
 import 'expect-puppeteer';
-import { MAGIC_SNAPSHOT, imagePath, STUB_MESSAGE } from '../constants';
+import { MAGIC_SNAPSHOT, imagePath, STUB_MESSAGE, STUB_TIME } from '../constants';
 const getPuppeteerType = require('expect-puppeteer/lib/utils').getPuppeteerType;
 const getState = require('expect/build/jest_matchers_object').getState;
 import notToMatch from 'expect-puppeteer/lib/matchers/notToMatch';
@@ -63,7 +63,7 @@ const elementHandleMatchers = {
 async function createScreenshot(_context, actual, error) {
   const screenshot = randomString() + '.png';
   await actual.screenshot({ path: path.join(imagePath, screenshot) });
-  error.stack += `\n${MAGIC_SNAPSHOT}=${screenshot}`;
+  error.stack += `\n${STUB_TIME}=${new Date()}\n${MAGIC_SNAPSHOT}=${screenshot}`;
 }
 
 function createMatcher(context, actual, matcher) {
