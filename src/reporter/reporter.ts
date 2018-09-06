@@ -72,11 +72,9 @@ Run Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${((new Dat
 
     let totalTime = 0;
     results.testResults.map(suit => {
-      suit.testResults.map(test => {
-        totalTime += test.duration / 1000;
-      });
+      totalTime += (suit.perfStats.end - suit.perfStats.start) / 1000;
     });
-    content += `\nTotal Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totalTime.toFixed(0)}s`;
+    content += `\nTotal Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totalTime.toFixed(3)}s`;
 
     let failContent = '';
     reporterTestResult.map(suit => {
