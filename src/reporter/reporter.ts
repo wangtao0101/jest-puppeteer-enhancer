@@ -67,8 +67,17 @@ Test Suites: <font color=red>${results.numFailedTestSuites} failed</font>, <font
 
 Tests:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color=red>${results.numFailedTests} failed</font>, <font color='#96E22E'>${results.numPassedTests} passed</font>, <font color='#B2D62E'>${results.numPendingTests} skipped</font>, ${results.numTotalTests} total
 
-Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${((new Date().getTime() - results.startTime) / 1000).toFixed(3)}s
+Run Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${((new Date().getTime() - results.startTime) / 1000).toFixed(3)}s
 `;
+
+    let totalTime = 0;
+    results.testResults.map(suit => {
+      suit.testResults.map(test => {
+        totalTime += test.duration / 1000;
+      });
+    });
+    content += `\nTotal Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${totalTime.toFixed(0)}s`;
+
     let failContent = '';
     reporterTestResult.map(suit => {
       failContent += suit;
@@ -137,6 +146,8 @@ ${testContent}
           }
           if (time !== '') {
             testReporterMd += `\nTime: ${time}`;
+          } else {
+            testReporterMd += `\nTime: ${new Date()}`;
           }
           testReporterMd = `${testReporterMd}
 \`\`\`js
